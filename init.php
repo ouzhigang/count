@@ -29,6 +29,17 @@ if($ifcookie==0){
 			mysqli_close($conn);
 			exit(0);
 		break;
+		case "pie":
+			include_once("include/top.php");
+			
+			$f = isset($_GET["f"]) ? str_filter($_GET["f"]) : "";
+			
+			header("Content-type: application/json; chartset=uft-8");
+			$data = getPie($f, $year, $month, $day);
+			echo json_encode($data);
+			exit();
+			
+		break;
 		default:
 			include("template/top.php");
 			include("template/table.php");

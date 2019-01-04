@@ -1,11 +1,11 @@
 <script src="static/js/highcharts.js"></script>
 <div style="text-align:center;">
 <div class="btn-group">
-<button type="button" class="btn btn-default" onclick="writePie(get_title,get_series)">路径</button>
-<button type="button" class="btn btn-default" onclick="writePie(referrer_title,referrer_series)">来路</button>
-<button type="button" class="btn btn-default" onclick="writePie(country_title,country_series)">国家</button>
-<button type="button" class="btn btn-default" onclick="writePie(os_title,os_series)">系统</button>
-<button type="button" class="btn btn-default" onclick="writePie(browser_title,browser_series)">浏览器</button>
+<button type="button" class="btn btn-default" onclick="writePie(get_title)">路径</button>
+<button type="button" class="btn btn-default" onclick="writePie(referrer_title)">来路</button>
+<button type="button" class="btn btn-default" onclick="writePie(country_title)">国家</button>
+<button type="button" class="btn btn-default" onclick="writePie(os_title)">系统</button>
+<button type="button" class="btn btn-default" onclick="writePie(browser_title)">浏览器</button>
 </div>
 </div>
 <div id="pie" style="height:224px;"></div>
@@ -57,41 +57,52 @@ var plotOptions = {
 		center:['50%','75%']
 	}
 };
+
 var credits = {
 	enabled:false
 };
-var get_series = [{
-	type:'pie',
-	innerSize:'50%',
-	data:[<?php getPie("get",$year,$month,$day);?>]
-}];
-var referrer_series = [{
-	type:'pie',
-	innerSize:'50%',
-	data:[<?php getPie("referrer",$year,$month,$day);?>]
-}];
-var country_series = [{
-	type:'pie',
-	innerSize:'50%',
-	data:[<?php getPie("country",$year,$month,$day);?>]
-}];
-var os_series = [{
-	type:'pie',
-	innerSize:'50%',
-	data:[<?php getPie("os",$year,$month,$day);?>]
-}];
-var browser_series = [{
-	type:'pie',
-	innerSize:'50%',
-	data:[<?php getPie("browser",$year,$month,$day);?>]
-}];
+
 var json = {};
 json.tooltip = tooltip;
 json.plotOptions = plotOptions;
 json.credits = credits;
-function writePie(title,series){
-	json.title = title;
-	json.series = series;
-	$("#pie").highcharts(json);
+function writePie(title) {
+	
+	var url = null;
+	if(title.text == "路径") {		
+		url = "index.php?mod=pie&f=get&dt=" + Math.random();		
+	}
+	else if(title.text == "来路") {
+		url = "index.php?mod=pie&f=referrer&dt=" + Math.random();
+	}
+	else if(title.text == "国家") {
+		url = "index.php?mod=pie&f=country&dt=" + Math.random();
+	}
+	else if(title.text == "系统") {
+		url = "index.php?mod=pie&f=os&dt=" + Math.random();
+	}
+	else if(title.text == "浏览器") {
+		url = "index.php?mod=pie&f=browser&dt=" + Math.random();
+	}
+	
+	if(url != null) {
+		$.ajax({
+			type: "GET",
+			url: url,
+			dataType: "json",
+			success: function(data) {
+				var series = [{
+					type: 'pie',
+					innerSize: '50%',
+					data: data
+				}];
+			
+				json.title = title;
+				json.series = series;
+				$("#pie").highcharts(json);
+			}
+		});
+	}
 }
+
 </script>

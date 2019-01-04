@@ -16,15 +16,15 @@ if(isset($_GET["page"])) {
 }
 function getmonthpv($year,$month){
 	global $conn;
-	$sql = "SELECT count(month) FROM count WHERE year='".$year."' AND month='".$month."'";
+	$sql = "SELECT count(id) as total FROM count WHERE year='".$year."' AND month='".$month."'";
 	$re = mysqli_fetch_array(mysqli_query($conn,$sql));
-	return $re["count(month)"];
+	return $re["total"];
 }
 function getdaypv($year,$month,$day){
 	global $conn;
-	$sql = "SELECT count(day) FROM count WHERE year='".$year."' AND month='".$month."' AND day='".$day."'";
+	$sql = "SELECT count(id) as total FROM count WHERE year='".$year."' AND month='".$month."' AND day='".$day."'";
 	$re = mysqli_fetch_array(mysqli_query($conn,$sql));
-	return $re["count(day)"];
+	return $re["total"];
 }
 function getmonthuv($year,$month){
 	global $conn;
@@ -46,12 +46,18 @@ function getnum($name,$value,$year,$month,$day){
 }
 function getPie($name,$year,$month,$day){
 	global $conn;
-	$sql = "select distinct(`".$name."`) from count WHERE `year`='".$year."' AND `month`='".$month."' AND `day`='".$day."'";
+	$sql = "select distinct(`".$name."`) from count WHERE `year`='".$year."' AND `month`='".$month."' AND `day`='".$day."' limit 20";
 	//echo $sql;
 	$re = $conn->query($sql);
+	
+	$data = array();
 	if($re->num_rows > 0){
-		while($row = $re->fetch_assoc()){
-			echo "['".$row[$name]."',".getnum($name,$row[$name],$year,$month,$day)/getdaypv($year,$month,$day)."],";
+		while($row = $re->fetch_assoc()) {
+			$data[] = array(
+				$row[$name],
+				floatval(number_format(getnum($name, $row[$name], $year, $month, $day) / getdaypv($year, $month, $day), 3, '.', ''))
+			);
 		}
 	}
+	return $data;
 }
