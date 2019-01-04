@@ -11,6 +11,15 @@
 <script src="static/js/jquery.min.js"></script>
 <script src="static/js/bootstrap.min.js"></script>
 <script src="template/main.js"></script>
+<style>
+.input-group {
+	width: 100%;
+}
+.input-group-addon {
+	width: 40%;
+	text-align: right;
+}
+</style>
 </head>
 <body>
 

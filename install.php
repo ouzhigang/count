@@ -93,6 +93,15 @@ if($ifOk==1){
 <link href="static/css/bootstrap.min.css" rel="stylesheet">
 <script src="static/js/jquery.min.js"></script>
 <script src="static/js/bootstrap.min.js"></script>
+<style>
+.input-group {
+	width: 100%;
+}
+.input-group-addon {
+	width: 40%;
+	text-align: right;
+}
+</style>
 </head>
 <body>
 
@@ -102,7 +111,7 @@ if($ifOk==1){
 <br />
 <form method="POST" action="install.php" class="bs-example bs-example-form" role="form">
 <fieldset>
-<center><legend>安装程序</legend></center>
+<center><legend>统计程序 安装设置</legend></center>
 <div class="input-group">
 <span class="input-group-addon">数据库地址</span>
 <input type="text" class="form-control" id="dbhost" name="dbhost" />
